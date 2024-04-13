@@ -27,7 +27,7 @@ public class Spreadsheet extends Grid {
         String[] trimed = command.split(" ");
         if (trimed.length == 1) {
             SpreadsheetLocation tempLoc = new SpreadsheetLocation(command);
-            return cells[tempLoc.getRow()][tempLoc.getColumn()].fullCellText();
+            return printCellResult(trimed[0],tempLoc.getRow(),tempLoc.getColumn());
         }
 
 
@@ -88,6 +88,10 @@ public class Spreadsheet extends Grid {
 
     public static int getColumnNumberFromColumnLetter(String columnLetter) {
         return Character.toUpperCase(columnLetter.charAt(0)) - 'A';
+    }
+
+    private String printCellResult (String cellID, int row, int column){         
+        return (cellID.toUpperCase() + " is " + cells[row][column].fullCellText() + "\n" + getGridText());     
     }
 
 
