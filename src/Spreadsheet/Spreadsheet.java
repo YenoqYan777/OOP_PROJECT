@@ -1,9 +1,8 @@
 package src.Spreadsheet;
 
-import src.CellTypes.Cell;
-import src.CellTypes.EmptyCell;
-import src.CellTypes.TextCell;
+import src.CellTypes.*;
 import src.Grid;
+import src.Location;
 
 public class Spreadsheet extends Grid {
     private Cell[][] cells;
@@ -26,6 +25,7 @@ public class Spreadsheet extends Grid {
 
         String[] trimed = command.split(" ");
         if (trimed.length == 1) {
+
             SpreadsheetLocation tempLoc = new SpreadsheetLocation(command);
             return printCellResult(trimed[0],tempLoc.getRow(),tempLoc.getColumn());
         }
@@ -53,7 +53,60 @@ public class Spreadsheet extends Grid {
 
         }
 
-        return getGridText();
+        if(command.contains("%")) {
+
+            int length = trimed[2].length();
+            String value = trimed[2].substring(0, length - 1);
+            int col = getColumnNumberFromColumnLetter(trimed[0].substring(0,1));
+            int row = Integer.parseInt(trimed[0].substring(1)) - 1;
+            cells[row][col] = new PercentCell(value);
+
+            return getGridText();
+        }
+
+        if(trimed.length == 3 ) {
+
+            String value = trimed[2];
+            int col = getColumnNumberFromColumnLetter(trimed[0].substring(0,1));
+            int row = Integer.parseInt(trimed[0].substring(1)) - 1;
+            cells[row][col] = new ValueCell(value);
+            return getGridText();
+        }
+
+        if(command.contains("(") && command.contains(")")) {
+            // Find the opening and closing parentheses indices
+            int openingIndex = command.indexOf('(');
+            int closingIndex = command.indexOf(')', openingIndex);
+
+            // Extract the expression along with the parentheses
+            String expression = command.substring(openingIndex, closingIndex + 1);
+            int col = getColumnNumberFromColumnLetter(trimed[0].substring(0,1));
+            int row = Integer.parseInt(trimed[0].substring(1)) - 1;
+            cells[row][col] = new FormulaCell(expression, cells);
+
+            return getGridText();
+
+        }
+
+        return "Example input is the following\nA1 = 10\nA1 = \"string\"\nA1 = 10%\nA1 = ( SUM A1-A10 )\nA1 = ( AVG A1-A10 )";
+    }
+
+    @Override
+    public int getRows()
+    {
+        return 20;
+    }
+
+    @Override
+    public int getCols()
+    {
+        return 12;
+    }
+
+    @Override
+    public Cell getCell(Location loc)
+    {
+        return cells[loc.getRow()][loc.getColumn()];
     }
 
     private void clearAllCells() {
