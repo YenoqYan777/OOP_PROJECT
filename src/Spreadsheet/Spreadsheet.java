@@ -109,6 +109,10 @@ public class Spreadsheet extends Grid {
         return cells[loc.getRow()][loc.getColumn()];
     }
 
+    public void setCell(int row, int column, Cell newCell) {
+        cells[row][column] = newCell;
+    }
+
     private void clearAllCells() {
         // Clear all cells in the spreadsheet
         for (int row = 0; row < 20; row++) {

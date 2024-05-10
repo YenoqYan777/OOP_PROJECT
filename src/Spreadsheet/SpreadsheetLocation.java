@@ -19,6 +19,13 @@ public class SpreadsheetLocation extends Location {
 
     }
 
+    public SpreadsheetLocation(int row, int column) {
+        super();
+        this.row = row;
+        this.column = column;
+    }
+
+
 
     @Override
     public int getRow() {

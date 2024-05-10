@@ -2,6 +2,8 @@ package src;
 
 import src.Spreadsheet.Spreadsheet;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.Scanner;
 
 public class Main {
@@ -22,8 +24,13 @@ public class Main {
                 command = scanner.nextLine();
             }
         } else if (appType.equalsIgnoreCase("GUI")) {
-            //TODO implement the GUI version
-            System.out.println("Coming soon...");
+            // Redirect System.out to a null OutputStream to prevent console output in GUI mode
+            System.setOut(new PrintStream(new OutputStream() {
+                public void write(int b) {
+                    // NO-OP
+                }
+            }));
+            new SpreadsheetGUI();
         }
         else {
             System.out.println("There are 2 possible inputs: \"Console\" or \"GUI\" ");
